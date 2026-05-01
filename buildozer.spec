@@ -1,4 +1,3 @@
-
 [app]
 title = Hesap Makinesi
 package.name = kokai
@@ -8,10 +7,10 @@ source.include_exts = py,png,jpg,kv,json
 version = 1.0.0
 requirements = python3,kivy,android
 orientation = portrait
-android.permissions = INTERNET, VIBRATE, CAMERA, ACCESS_WIFI_STATE, ACCESS_FINE_LOCATION
-android.api = 31
+android.permissions = INTERNET, VIBRATE, CAMERA, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, ACCESS_WIFI_STATE, ACCESS_FINE_LOCATION
+android.api = 33
 android.minapi = 21
-android.sdk = 31
-android.ndk = 23b
+android.sdk = 33
+android.ndk = 25b
 android.accept_sdk_license = True
 icon.filename = icon.png
