@@ -1,41 +1,17 @@
-name: K-OS-FINAL-BUILD
+name: Build-APK
 on: [push]
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Build
+        uses: ArtemSBulgakov/buildozer-action@v1
         with:
-          python-version: '3.10'
-
-      - name: Install System Tools
-        run: |
-          sudo apt update
-          sudo apt install -y build-essential libtool autoconf automake pkg-config gperf
-          sudo apt install -y python3-pip git ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev
-          pip3 install --user --upgrade buildozer cython virtualenv
-
-      - name: Build APK
-        run: |
-          # 🌀 Giriş kapısını mühürle
-          cp calculator_mask.py main.py || cp hesap_makinesi.py main.py || true
-          
-          # 📜 KRİTİK: Lisansları Buildozer'dan bağımsız önceden mühürle kanka
-          sed -i 's/# android.accept_sdk_license = False/android.accept_sdk_license = True/' buildozer.spec
-          
-          export PATH=$PATH:$HOME/.local/bin
-          # 'yes' komutunu sadece bir kez ve güvenli şekilde kullanıyoruz
-          buildozer -v android debug
-        env:
-          # Otomatik onay için çevre değişkenini mühürlüyoruz
-          APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
-
-      - name: Upload APK
+          buildozer_version: master
+          command: buildozer -v android debug
+      - name: Upload
         uses: actions/upload-artifact@v4
         with:
-          name: KOK-AI-FINAL-APK
+          name: K-OS-APK
           path: bin/*.apk
