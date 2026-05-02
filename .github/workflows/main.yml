@@ -7,7 +7,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Dependencies
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install System Tools
         run: |
           sudo apt update
           sudo apt install -y build-essential libtool autoconf automake pkg-config gperf
@@ -16,15 +21,21 @@ jobs:
 
       - name: Build APK
         run: |
-          # Giriş kapısını mühürle
+          # 🌀 Giris kapisini muhurle
           cp calculator_mask.py main.py || cp hesap_makinesi.py main.py || true
+          
+          # 📜 KRITIK: Lisanslari saniyeler icinde otonom muhurle kanka
+          sed -i 's/# android.accept_sdk_license = False/android.accept_sdk_license = True/' buildozer.spec
+          
           export PATH=$PATH:$HOME/.local/bin
-          # Lisansları otomatik onayla ve ateşle
-          yes | buildozer -v android debug
+          # 'yes' komutunu siliyoruz, sistem artik kendi kendine onaylayacak
+          buildozer -v android debug
+        env:
+          # Google'in onay mekanizmasini bu muhurle baypas ediyoruz kanka
+          APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: KOK-AI-FINAL-APK
           path: bin/*.apk
-
